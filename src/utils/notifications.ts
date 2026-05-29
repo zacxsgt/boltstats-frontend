@@ -2,13 +2,14 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
-// 1. ATUR PERILAKU NOTIFIKASI SAAT APLIKASI SEDANG DIBUKA
+// 1. ATUR PERILAKU NOTIFIKASI SAAT APLIKASI TERBUKA
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true, // Munculkan pop-up di atas layar
-    shouldPlaySound: true, // Bunyikan suara khas notif
+    shouldShowAlert: true,
+    shouldShowBanner: true, // <-- Properti tambahan yang diminta Expo versi baru
+    shouldPlaySound: true,
     shouldSetBadge: false,
-  }),
+  } as Notifications.NotificationBehavior), // <-- Stempel paksa agar TypeScript tunduk
 });
 
 // 2. FUNGSI UNTUK MEMINTA IZIN & MENGAMBIL "KTP" HP (PUSH TOKEN)
