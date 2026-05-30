@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Boltstats", 
+    "name": "Boltstats",
     "slug": "boltstats",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-apk.png", 
+    "icon": "./assets/images/icon-apk.png",
     "scheme": "boltstats",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -18,22 +18,21 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.gousss.boltstats",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.gousss.boltstats"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-   "plugins": [
+    "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/logo-apk.png", 
-          "imageWidth": 250, 
+          "image": "./assets/images/logo-apk.png",
+          "imageWidth": 250,
           "resizeMode": "contain",
-          "backgroundColor": "#121414", 
+          "backgroundColor": "#121414",
           "dark": {
             "backgroundColor": "#121414"
           }
@@ -45,7 +44,10 @@
       "reactCompiler": true
     },
     "extra": {
-      "router": {}
-    }
+      "router": {},
+      "eas": {
+        "projectId": "41f4bf1f-f40b-4afc-960e-d19cca60a93d"
+      }
     }
   }
+}
