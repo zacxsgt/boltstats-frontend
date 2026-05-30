@@ -21,7 +21,6 @@ export default function PredictionScreen() {
 
   useEffect(() => {
     if (!id) return;
-
     let isMounted = true; 
 
     const loadData = async () => {
@@ -83,7 +82,6 @@ export default function PredictionScreen() {
         
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
           
-          {/* === 1. HERO & LOGO TIM === */}
           <GlassCard style={styles.heroCard}>
             <View style={styles.heroTop}><Text style={styles.leagueTag}>{meta.leagueName || 'MATCH PREVIEW'}</Text></View>
             <Text style={styles.matchTitle}>
@@ -105,7 +103,6 @@ export default function PredictionScreen() {
             </View>
           </GlassCard>
 
-          {/* === 2. TINJAUAN SINGKAT === */}
           <GlassCard style={{ marginTop: 20 }}>
             <Text style={styles.sectionTitle}>TINJAUAN SINGKAT</Text>
             <View style={styles.tinjauanItem}>
@@ -124,14 +121,12 @@ export default function PredictionScreen() {
             </View>
           </GlassCard>
 
-          {/* === 3. ANALISIS TAKTIK & FORMASI === */}
           <GlassCard style={{ marginTop: 20 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
               <Ionicons name="analytics" size={18} color="#e10600" style={{ marginRight: 8 }} />
               <Text style={styles.sectionTitle}>ANALISIS TAKTIK & SKEMA</Text>
             </View>
 
-            {/* Kotak Teks Formasi */}
             <View style={styles.formationBox}>
               <Text style={styles.formationLabel}>PREDIKSI FORMASI</Text>
               <View style={styles.formationRow}>
@@ -141,30 +136,20 @@ export default function PredictionScreen() {
               </View>
             </View>
 
-            {/* --- VISUAL LAPANGAN (INFO TAMBAHAN UI) --- */}
             <View style={styles.pitchContainer}>
               <Svg height="140" width="100%" viewBox="0 0 300 140">
-                {/* Rumput Lapangan */}
                 <Rect x="0" y="0" width="300" height="140" fill="#1b2a1a" rx="8" />
-                {/* Garis Tengah */}
                 <Line x1="150" y1="0" x2="150" y2="140" stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
-                {/* Lingkaran Tengah */}
                 <Circle cx="150" cy="70" r="30" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
-                {/* Kotak Penalti Home */}
                 <Rect x="0" y="30" width="45" height="80" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
-                {/* Kotak Penalti Away */}
                 <Rect x="255" y="30" width="45" height="80" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
-                
-                {/* Simulasi Titik Formasi Tuan Rumah (Merah) */}
-                <Circle cx="20" cy="70" r="6" fill="#e10600" /> {/* Kiper */}
+                <Circle cx="20" cy="70" r="6" fill="#e10600" />
                 <Circle cx="50" cy="30" r="6" fill="#e10600" />
                 <Circle cx="50" cy="70" r="6" fill="#e10600" />
                 <Circle cx="50" cy="110" r="6" fill="#e10600" />
                 <Circle cx="90" cy="50" r="6" fill="#e10600" />
                 <Circle cx="90" cy="90" r="6" fill="#e10600" />
-
-                {/* Simulasi Titik Formasi Tim Tamu (Abu-abu) */}
-                <Circle cx="280" cy="70" r="6" fill="#e2e2e2" /> {/* Kiper */}
+                <Circle cx="280" cy="70" r="6" fill="#e2e2e2" />
                 <Circle cx="250" cy="30" r="6" fill="#e2e2e2" />
                 <Circle cx="250" cy="70" r="6" fill="#e2e2e2" />
                 <Circle cx="250" cy="110" r="6" fill="#e2e2e2" />
@@ -177,7 +162,6 @@ export default function PredictionScreen() {
             <Text style={styles.bodyText}><Text style={{fontWeight: 'bold', color: '#e2e2e2'}}>Faktor Kunci:</Text> {prediction.analisis_taktik?.kunci_pertandingan}</Text>
           </GlassCard>
 
-          {/* === 4. KOTAK PREDICTIONS GRID === */}
           <View style={styles.gridContainer}>
             <GlassCard style={[styles.gridBox, { borderBottomColor: '#e10600', borderBottomWidth: 2 }]}>
               <Text style={styles.gridLabel}>SKOR AKHIR</Text>
@@ -202,9 +186,7 @@ export default function PredictionScreen() {
             <Text style={[styles.gridValue, { color: '#e10600', fontSize: 18 }]}>{prediction.prediksi_skor?.pemenang_babak_pertama}</Text>
           </GlassCard>
 
-          {/* === 5. VISUAL ANALYTICS === */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 }}>
-            {/* PIE CHART */}
             <GlassCard style={{ width: '48%', alignItems: 'center', padding: 15 }}>
               <Text style={[styles.gridLabel, {marginBottom: 15}]}>WIN PROBABILITY</Text>
               <View style={styles.chartContainer}>
@@ -232,7 +214,6 @@ export default function PredictionScreen() {
               </View>
             </GlassCard>
 
-            {/* BAR CHART */}
             <GlassCard style={{ width: '48%', padding: 15, justifyContent: 'center' }}>
               <Text style={[styles.gridLabel, {marginBottom: 15, textAlign: 'center'}]}>ATTACK INTENSITY</Text>
               <View style={styles.barChartWrapper}>
@@ -247,14 +228,12 @@ export default function PredictionScreen() {
             </GlassCard>
           </View>
 
-          {/* === 6. TAMBAHAN BARU: KABAR TIM (CEDERA & TOP SKOR) === */}
           <GlassCard style={{ marginTop: 20 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
               <Ionicons name="medical" size={18} color="#e10600" style={{ marginRight: 8 }} />
               <Text style={styles.sectionTitle}>KABAR TIM TERKINI</Text>
             </View>
 
-            {/* Daftar Cedera */}
             <Text style={[styles.gridLabel, { color: '#e10600', marginBottom: 8 }]}>DAFTAR CEDERA / ABSEN</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
               <View style={{ width: '48%' }}>
@@ -269,7 +248,6 @@ export default function PredictionScreen() {
 
             <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.05)', marginBottom: 15 }} />
 
-            {/* Top Skor Tim */}
             <Text style={[styles.gridLabel, { color: '#e10600', marginBottom: 8 }]}>TOP SKOR TIM (MUSIM INI)</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ width: '48%' }}>
@@ -283,7 +261,6 @@ export default function PredictionScreen() {
             </View>
           </GlassCard>
 
-          {/* === 7. SARAN BETTING === */}
           <GlassCard style={{ marginTop: 20 }}>
             <Text style={styles.sectionTitle}>SARAN BETTING</Text>
             <View style={styles.betRow}>
@@ -309,7 +286,6 @@ export default function PredictionScreen() {
             </View>
           </GlassCard>
 
-          {/* === 8. KESIMPULAN AI === */}
           <GlassCard style={{ marginTop: 20, borderTopWidth: 2, borderTopColor: '#e10600' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
               <View style={styles.aiIconBadge}><Ionicons name="hardware-chip" size={20} color="#fff" /></View>

@@ -123,10 +123,11 @@ export default function HomeScreen() {
       <AnimatedBackground />
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent={true} />
       
-      <ScrollView 
-        showsVerticalScrollIndicator={false} 
-        contentContainerStyle={styles.scrollContent}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#e8401c" />}
+    <ScrollView 
+      style={styles.root} 
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={[styles.scrollContent, { paddingBottom: 120 }]} 
+
       >
         
         {/* === HEADER === */}
@@ -136,7 +137,7 @@ export default function HomeScreen() {
               
               {/* PERBAIKAN LOGO: Kotak Oren Dihapus, Murni Logo Anda Saja */}
               <Image 
-                source={require('../../assets/images/logo_apk.png')} 
+                source={require('../../assets/images/logo-apk.png')} 
                 style={styles.mainLogo} 
               />
               

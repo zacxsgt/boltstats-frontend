@@ -71,18 +71,18 @@ export default function TabLayout() {
       {/* === NAVIGASI UTAMA (KAPSUL KACA) === */}
       <Tabs
         screenOptions={{
-          headerShown: false,
-          tabBarShowLabel: false,
-          safeAreaInsets: { bottom: 0, top: 0 },
-          tabBarStyle: styles.tabBarOuter,
-          tabBarItemStyle: styles.tabBarItem,
-          tabBarIconStyle: styles.tabBarIcon,
-          tabBarBackground: () => (
-            <View style={styles.tabBarInner}>
-              <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFill} />
-            </View>
-          ),
-        }}
+        headerShown: false,
+        tabBarShowLabel: false,
+        // Baris safeAreaInsets SUDAH SAYA HAPUS di sini
+        tabBarStyle: styles.tabBarOuter,
+        tabBarItemStyle: styles.tabBarItem,
+        tabBarIconStyle: styles.tabBarIcon,
+        tabBarBackground: () => (
+          <View style={styles.tabBarInner}>
+            <BlurView intensity={70} tint="dark" style={StyleSheet.absoluteFill} />
+          </View>
+        ),
+      }}
       >
         <Tabs.Screen
           name="index"
@@ -125,7 +125,7 @@ export default function TabLayout() {
           { opacity: fadeAnim } 
         ]}>
           <Animated.Image
-            source={require('../../assets/images/logo_apk.png')} 
+            source={require('../../assets/images/logo-apk.png')} 
             style={[
               styles.splashLogo,
               { transform: [{ scale: scaleAnim }] } 
