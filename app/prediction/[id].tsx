@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import Svg, { Circle } from 'react-native-svg';
+import Svg, { Circle, Rect, Line } from 'react-native-svg';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../constants/api';
@@ -19,28 +19,23 @@ export default function PredictionScreen() {
   const [error, setError] = useState<string | null>(null);
   const [meta, setMeta] = useState<any>({});
 
-  // === KUNCI PERBAIKAN: Gabungkan logika dan bersihkan layar sebelum muat data baru ===
   useEffect(() => {
-    // Jika tidak ada ID, jangan lakukan apa-apa
     if (!id) return;
 
-    let isMounted = true; // Mencegah kebocoran memori (memory leak)
+    let isMounted = true; 
 
     const loadData = async () => {
-      // 1. SAPU BERSIH DATA LAMA (Anti-Nyangkut)
       setLoading(true);
       setPrediction(null);
       setError(null);
       setMeta({});
 
       try {
-        // 2. Ambil Meta (Logo & Nama Tim)
         const savedMeta = await AsyncStorage.getItem('currentMatchMeta');
         if (savedMeta && isMounted) {
           setMeta(JSON.parse(savedMeta));
         }
 
-        // 3. Tembak API Prediksi AI
         const response = await axios.get(`${API_URL}/api/prediction/${id}`);
         if (isMounted) {
           setPrediction(response.data);
@@ -58,7 +53,6 @@ export default function PredictionScreen() {
 
     loadData();
 
-    // Fungsi pembersih jika user tiba-tiba pencet "Back" saat loading
     return () => {
       isMounted = false;
     };
@@ -136,6 +130,8 @@ export default function PredictionScreen() {
               <Ionicons name="analytics" size={18} color="#e10600" style={{ marginRight: 8 }} />
               <Text style={styles.sectionTitle}>ANALISIS TAKTIK & SKEMA</Text>
             </View>
+
+            {/* Kotak Teks Formasi */}
             <View style={styles.formationBox}>
               <Text style={styles.formationLabel}>PREDIKSI FORMASI</Text>
               <View style={styles.formationRow}>
@@ -144,6 +140,39 @@ export default function PredictionScreen() {
                 <Text style={styles.formationText}>{prediction.analisis_taktik?.formasi_away || '4-2-3-1'}</Text>
               </View>
             </View>
+
+            {/* --- VISUAL LAPANGAN (INFO TAMBAHAN UI) --- */}
+            <View style={styles.pitchContainer}>
+              <Svg height="140" width="100%" viewBox="0 0 300 140">
+                {/* Rumput Lapangan */}
+                <Rect x="0" y="0" width="300" height="140" fill="#1b2a1a" rx="8" />
+                {/* Garis Tengah */}
+                <Line x1="150" y1="0" x2="150" y2="140" stroke="rgba(255,255,255,0.3)" strokeWidth="2" />
+                {/* Lingkaran Tengah */}
+                <Circle cx="150" cy="70" r="30" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
+                {/* Kotak Penalti Home */}
+                <Rect x="0" y="30" width="45" height="80" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
+                {/* Kotak Penalti Away */}
+                <Rect x="255" y="30" width="45" height="80" stroke="rgba(255,255,255,0.3)" strokeWidth="2" fill="none" />
+                
+                {/* Simulasi Titik Formasi Tuan Rumah (Merah) */}
+                <Circle cx="20" cy="70" r="6" fill="#e10600" /> {/* Kiper */}
+                <Circle cx="50" cy="30" r="6" fill="#e10600" />
+                <Circle cx="50" cy="70" r="6" fill="#e10600" />
+                <Circle cx="50" cy="110" r="6" fill="#e10600" />
+                <Circle cx="90" cy="50" r="6" fill="#e10600" />
+                <Circle cx="90" cy="90" r="6" fill="#e10600" />
+
+                {/* Simulasi Titik Formasi Tim Tamu (Abu-abu) */}
+                <Circle cx="280" cy="70" r="6" fill="#e2e2e2" /> {/* Kiper */}
+                <Circle cx="250" cy="30" r="6" fill="#e2e2e2" />
+                <Circle cx="250" cy="70" r="6" fill="#e2e2e2" />
+                <Circle cx="250" cy="110" r="6" fill="#e2e2e2" />
+                <Circle cx="210" cy="50" r="6" fill="#e2e2e2" />
+                <Circle cx="210" cy="90" r="6" fill="#e2e2e2" />
+              </Svg>
+            </View>
+
             <Text style={[styles.bodyText, {marginBottom: 10}]}><Text style={{fontWeight: 'bold', color: '#e2e2e2'}}>Skema Permainan:</Text> {prediction.analisis_taktik?.skema_permainan}</Text>
             <Text style={styles.bodyText}><Text style={{fontWeight: 'bold', color: '#e2e2e2'}}>Faktor Kunci:</Text> {prediction.analisis_taktik?.kunci_pertandingan}</Text>
           </GlassCard>
@@ -218,7 +247,43 @@ export default function PredictionScreen() {
             </GlassCard>
           </View>
 
-          {/* === 6. SARAN BETTING === */}
+          {/* === 6. TAMBAHAN BARU: KABAR TIM (CEDERA & TOP SKOR) === */}
+          <GlassCard style={{ marginTop: 20 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
+              <Ionicons name="medical" size={18} color="#e10600" style={{ marginRight: 8 }} />
+              <Text style={styles.sectionTitle}>KABAR TIM TERKINI</Text>
+            </View>
+
+            {/* Daftar Cedera */}
+            <Text style={[styles.gridLabel, { color: '#e10600', marginBottom: 8 }]}>DAFTAR CEDERA / ABSEN</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 }}>
+              <View style={{ width: '48%' }}>
+                <Text style={[styles.teamNameLabel, { fontSize: 10, color: '#e10600' }]}>{getShortName(meta.homeName)}</Text>
+                <Text style={[styles.bodyText, { fontSize: 11 }]}>{prediction.info_tambahan_ui?.daftar_cedera?.home || "Aman"}</Text>
+              </View>
+              <View style={{ width: '48%' }}>
+                <Text style={[styles.teamNameLabel, { fontSize: 10, color: '#e2e2e2', textAlign: 'right' }]}>{getShortName(meta.awayName)}</Text>
+                <Text style={[styles.bodyText, { fontSize: 11, textAlign: 'right' }]}>{prediction.info_tambahan_ui?.daftar_cedera?.away || "Aman"}</Text>
+              </View>
+            </View>
+
+            <View style={{ height: 1, backgroundColor: 'rgba(255,255,255,0.05)', marginBottom: 15 }} />
+
+            {/* Top Skor Tim */}
+            <Text style={[styles.gridLabel, { color: '#e10600', marginBottom: 8 }]}>TOP SKOR TIM (MUSIM INI)</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ width: '48%' }}>
+                <Text style={[styles.teamNameLabel, { fontSize: 10, color: '#e10600' }]}>{getShortName(meta.homeName)}</Text>
+                <Text style={[styles.bodyText, { fontSize: 11, fontWeight: 'bold' }]}>{prediction.info_tambahan_ui?.top_skor_tim?.home || "Data N/A"}</Text>
+              </View>
+              <View style={{ width: '48%' }}>
+                <Text style={[styles.teamNameLabel, { fontSize: 10, color: '#e2e2e2', textAlign: 'right' }]}>{getShortName(meta.awayName)}</Text>
+                <Text style={[styles.bodyText, { fontSize: 11, fontWeight: 'bold', textAlign: 'right' }]}>{prediction.info_tambahan_ui?.top_skor_tim?.away || "Data N/A"}</Text>
+              </View>
+            </View>
+          </GlassCard>
+
+          {/* === 7. SARAN BETTING === */}
           <GlassCard style={{ marginTop: 20 }}>
             <Text style={styles.sectionTitle}>SARAN BETTING</Text>
             <View style={styles.betRow}>
@@ -244,7 +309,7 @@ export default function PredictionScreen() {
             </View>
           </GlassCard>
 
-          {/* === 7. KESIMPULAN AI === */}
+          {/* === 8. KESIMPULAN AI === */}
           <GlassCard style={{ marginTop: 20, borderTopWidth: 2, borderTopColor: '#e10600' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
               <View style={styles.aiIconBadge}><Ionicons name="hardware-chip" size={20} color="#fff" /></View>
@@ -299,6 +364,7 @@ const styles = StyleSheet.create({
   formationRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   formationText: { fontSize: 20, fontStyle: 'italic', fontWeight: 'bold', color: '#e2e2e2' },
   formationVs: { fontSize: 12, fontStyle: 'italic', color: '#717070' },
+  pitchContainer: { marginBottom: 15, borderRadius: 8, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' },
   gridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 20 },
   gridBox: { width: '48%', alignItems: 'center', justifyContent: 'center', padding: 15, marginBottom: 15 },
   fullGridBox: { width: '100%', alignItems: 'center', justifyContent: 'center', padding: 15, marginTop: 5 },
